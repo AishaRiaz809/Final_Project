@@ -14,5 +14,15 @@ class TestDataLoad(unittest.TestCase):
         data = data_load(file_path)
         self.assertEqual(len(data.columns), 4)
 
+    def test_file_load2(self):
+        file_path = "Data/Spending_TestScore.csv"
+        data = data_load(file_path)
+        self.assertIsInstance(data, pd.DataFrame)
+
+    def test_data_columns(self):
+        file_path = "Data/Spending_TestScore.csv"
+        data = data_load(file_path)
+        self.assertEqual(len(data.columns), 6)
+
 if __name__ == '__main__':
     unittest.main()
