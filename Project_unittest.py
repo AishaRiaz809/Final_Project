@@ -9,5 +9,10 @@ class TestDataLoad(unittest.TestCase):
         data = data_load(file_path)
         self.assertIsInstance(data, pd.DataFrame)
 
+    def test_data_columns(self):
+        file_path = "Data/Education_Spending.csv"
+        data = data_load(file_path)
+        self.assertEqual(len(data.columns), 4)
+
 if __name__ == '__main__':
     unittest.main()
