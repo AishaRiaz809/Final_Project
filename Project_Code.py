@@ -38,5 +38,3 @@ def merge_datasets(education_data, gdp_data):
     how = 'left' # Merged column will be added to the left side of the dataset
     )
     return merged_data
-
-print(merge_datasets.head())
