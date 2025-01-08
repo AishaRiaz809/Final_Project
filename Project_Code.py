@@ -30,12 +30,13 @@ print(gdp_data.head())
 
 # Merging 'Public spending on education as a share of GDP' from Education_Spending into Spending_TestScores
 
-merged_data = pd.merge(
+def merge_datasets(education_data, gdp_data):
+    merged_data = pd.merge(
     education_data,
     gdp_data[['Entity', 'Year', 'Public spending on education as a share of GDP']], # columns I want to keep
     on = ['Entity', 'Year'], # Same column names from the first and second dataset
     how = 'left' # Merged column will be added to the left side of the dataset
-)
+    )
+    return merged_data
 
-print(merged_data.head())
-
+print(merge_datasets.head())
