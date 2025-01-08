@@ -28,7 +28,13 @@ file_path = "Data/Education_Spending.csv"
 gdp_data = data_load2(file_path)
 print(gdp_data.head())
 
+# Checking how many columns are in education_data and gdp_data
+
+print("Columns in education_data:", education_data.columns)
+print("Columns in gdp_data:", gdp_data.columns)
+
 # Merging 'Public spending on education as a share of GDP' from Education_Spending into Spending_TestScores
+
 
 def merge_datasets(education_data, gdp_data):
     merged_data = pd.merge(
@@ -38,3 +44,10 @@ def merge_datasets(education_data, gdp_data):
     how = 'left' # Merged column will be added to the left side of the dataset
     )
     return merged_data
+
+
+# Checking columns in merged_data
+
+merged_data = merge_datasets(education_data, gdp_data)
+print("Columns in merged_data:", merged_data.columns)
+print("Number of columns inmerged_data:", len(merged_data.columns))

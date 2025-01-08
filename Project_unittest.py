@@ -2,6 +2,7 @@ import unittest
 import pandas as pd
 from Project_Code import data_load
 from Project_Code import data_load2
+from Project_Code import merge_datasets
 
 class TestDataLoad(unittest.TestCase):
 
@@ -44,6 +45,15 @@ class TestDataLoad(unittest.TestCase):
         numeric_columns2 = ['Year', 'Public spending on education as a share of GDP']
         for col2 in numeric_columns2:
             self.assertTrue(pd.api.types.is_numeric_dtype(data2[col2]), f"{col2} is not numeric")
+
+    # Test to check the number of columns in the merged dataset
+    def test_merged_data(self):
+        file_path = "Data/Spending_TestScores.csv"
+        education_data = data_load(file_path)
+        file_path2 = "Data/Education_Spending.csv"
+        gdp_data = data_load2(file_path2)
+        merged_data = merge_datasets(education_data, gdp_data)
+        self.assertEqual(len(merged_data.columns), 7)
 
 if __name__ == '__main__':
     unittest.main()
