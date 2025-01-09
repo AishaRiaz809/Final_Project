@@ -97,6 +97,43 @@ def plot_barscores(merged_data):
     plt.show()
 
 # Calling the function to print the graph
-plot_barscores(merged_data)
+#plot_barscores(merged_data)
 
+
+def plot_dualbar(merged_data):
+
+    years_filtered = [2010, 2017, 2018, 2020]
+    filtered_data = merged_data[merged_data['Country'].isin(['United States', 'Finland']) & merged_data['Year'].isin(years_filtered)
+    ]
+
+    pivot_data = filtered_data.pivot(index = 'Year', columns = 'Country', values = 'Test_Scores')
+    pivot_expenditure = filtered_data.pivot(index = 'Year', columns = 'Country', values = 'Government_Expenditure')
+
+    x = np.arange(len(pivot_data))
+
+    bar_width = 0.4
+
+    fig, ax1 = plt.subplots(figsize = (10, 6))
+
+    ax1.bar(x-bar_width/2, pivot_data['United States'], bar_width, label = 'United States', color = '#4E79A7')
+    ax1.bar(x+bar_width/2, pivot_data['Finland'], bar_width, label = 'Finland', color = '#A0CBE8')
+
+    ax1.set_xlabel('Year')
+    ax1.set_ylabel('Test Scores')
+    ax1.set_title('Test Scores and Government Expenditure for the United States and Finland')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(pivot_data.index)
+    ax1.legend(loc = 'center left')
+
+    ax2 = ax1.twinx()
+
+    ax2.plot(x, pivot_expenditure['United States'], label = 'United States', color = 'red')
+    ax2.plot(x, pivot_expenditure['Finland'], label = 'Finland', color = 'blue')
+
+    ax2.set_ylabel('Government Expenditure on Education in millions ($)')
+    ax2.legend(loc = 'center right')
+
+    plt.show()
+
+plot_dualbar(merged_data)
 
