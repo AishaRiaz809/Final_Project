@@ -55,17 +55,69 @@ class TestDataLoad(unittest.TestCase):
         education_data = data_load(file_path)
         file_path2 = "Data/Education_Spending.csv"
         gdp_data = data_load2(file_path2)
-        merged_data = merge_datasets(education_data, gdp_data)
-        self.assertEqual(len(merged_data.columns), 7)
+        merged_data_test = merge_datasets(education_data, gdp_data)
+        self.assertEqual(len(merged_data_test.columns), 7)
 
+    # Merging data to use for unittests for graphs
+    def setUp(self):
+        file_path1 = "Data/Spending_TestScores.csv"
+        file_path2 = "Data/Education_Spending.csv"
+
+        data1 = data_load(file_path1)
+        data2 = data_load(file_path2)
+
+        self.merged_data = merge_datasets(data1, data2)
+
+        self.merged_data.rename(columns={
+            'Harmonized test scores': 'Test_Scores',
+            'Government expenditure on education, PPP$ (millions)': 'Government_Expenditure',
+            'Public spending on education as a share of GDP': 'Public_Spending',
+            'Entity': 'Country'
+        }, inplace=True)
+
+    def test_manual_setup_call(self):
+        self.setUp()
+        self.assertIsNotNone(self.merged_data, "Merged data should not be None")
+    
     # Test to check that the columns 'Year and 'Test_Scores' are numeric in plot_barscores
-    # FAILEDD
     def test_datatypes_barscores(self):
-        merged_data = self.test_merged_data()
-        self.assertTrue(pd.api.types.is_numeric_dtype(self.merged_data['Year']))
-        self.assertTrue(pd.api.types.is_numeric_dtype(self.merged_data['Test_Scores']))
+        #print(f"self.merged_data in test_datatypes_barscores: {self.merged_data}")
+        self.assertTrue(pd.api.types.is_numeric_dtype(self.merged_data['Year']), "Year column is not numeric")
+        self.assertTrue(pd.api.types.is_numeric_dtype(self.merged_data['Test_Scores']), "Test_Scores column is not numeric")
 
-    # Test to check
+    # Test to check the data has been correctly pivoted for the plot_barscores graph
+    def test_pivot_barscores(self):
+        years_filtered = [2010, 2017, 2018, 2020]
+        countries_filtered = ['United States', 'Finland']
+        filtered_data = self.merged_data[
+            self.merged_data['Country'].isin(countries_filtered) & self.merged_data['Year'].isin(years_filtered)
+        ]
+        pivot_data = filtered_data.pivot(index = 'Year', columns = 'Country', values = 'Test_Scores')
+        self.assertTrue('United States' in pivot_data.columns, "United States column missing in pivot")
+        self.assertTrue('Finland' in pivot_data.columns, "Finland column missing in pivot")
+        self.assertEqual(len(pivot_data), len(years_filtered), "Pivot table has incorrect number of rows")
+
+    # Test that filtering works correctly for graph plot_baracores
+    def test_filtering_dualbar(self):
+        years_filtered = [2010, 2017, 2018, 2020]
+        countries_filtered = ['United States', 'Finland']
+        filtered_data = self.merged_data[self.merged_data['Country'].isin(countries_filtered) & self.merged_data['Year'].isin(years_filtered)]
+        self.assertFalse(filtered_data.empty, "Filtered data is empty")
+        self.assertTrue(all(filtered_data['Year'].isin(years_filtered)), "Year filtering failed")
+        self.assertTrue(all(filtered_data['Country'].isin(countries_filtered)), "Country filtering failed")
+    
+    # Test that 'Test_Scores' and 'Government_Expenditure' are numeric
+    def test_numeric_dualbar(self):
+        numeric_columns = ['Test_Scores', 'Government_Expenditure']
+        for col in numeric_columns:
+            self.assertTrue(pd.api.types.is_numeric_dtype(self.merged_data[col]), f"{col} is not numeric")
+
+    # Test for average public spending calculation in graph plot_linegraph
+    def test_avg_publicspending(self):
+        years_filtered = [2015, 2016, 2017, 2018, 2019, 2020, 2021]
+        avg_spending = self.merged_data[self.merged_data['Year'].isin(years_filtered)]['Public_Spending'].mean()
+        self.assertIsInstance(avg_spending, float, "Average public spending is not a float")
+        self.assertGreater(avg_spending, 0, "Average public spending should be greater than 0")
 
 if __name__ == '__main__':
     unittest.main()
