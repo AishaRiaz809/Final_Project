@@ -1,0 +1,55 @@
+This text file provides a description of each unittest.
+
+test_file_load()
+This test was to check that the first dataset - 'Spending_TestScores' was loaded in correctly
+
+test_data_columns()
+This test was to check that the first datset - 'Spending_TestScores' has the correct number of columns - 6
+
+test_numeric_columns()
+This test was to check that 'Year', 'Harmonised Test Scores' and 'Government Expenditure on Education' are numeric
+
+test_file_load2()
+This test was to check that the second dataset - 'Education_Spending' was loaded in correctly
+
+test_data_columns2()
+This test was to check that the second dataset had the correct number of columns - 4
+
+test_numeric_columns2()
+This test was to check that 'Year' and 'Public Spending as percent of GDP' are numeric
+
+test_merged_data()
+This test was to check the number of columns in the merged dataset
+
+setUp()
+This merges the datasets to use for the unittests for graphs
+
+test_manual_setup_call()
+This test manually calls on setUp() because there were intial issues with the setUp() function
+
+test_datatypes_barscores()
+This test was to check that the columns 'Year and 'Test_Scores' are numeric from the graph plot_barscores
+
+test_pivot_barscores()
+This test was to check the data has been correctly pivoted for the plot_barscores graph
+
+test_filtering_dualbar()
+This test was to check that the filtering works correctly for the graph plot_baracores
+
+test_numeric_dualbar()
+This test was to check that 'Test_Scores' and 'Government_Expenditure' are numeric
+
+test_avg_publicspending()
+This test was to check that the average public spending calculation in graph plot_linegraph was calculated correctly
+
+
+
+
+
+
+
+
+
+
+
+
